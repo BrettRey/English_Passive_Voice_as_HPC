@@ -1,5 +1,7 @@
 # Revised Plan 2026-03-19
 
+Operational preregistration artifacts for this plan live in `docs/prereg/README.md`.
+
 ## Core Thesis
 
 The paper should argue that English passive voice is best treated as a maintained, projectible construction family with a robust verbal-passive core and structured margins. The point is not merely that passive diagnostics are messy. The point is that a cue-bundle account supports better grammatical and discourse generalizations than a short classical checklist does.
@@ -22,6 +24,7 @@ The plan should commit to these predictions before drafting:
 1. A probabilistic cue-bundle account should generalize better across corpora than a short classical checklist account.
 2. Canonical verbal passives should receive high passive-family probabilities, clear non-passive foils should receive low probabilities, and boundary cases should occupy the middle region more often than either extreme.
 3. The same small cue bundle should remain informative across corpora rather than collapsing into corpus-specific heuristics.
+4. The transferred passive-family probabilities should predict independent structural-licensing and discourse-fit judgments better than deterministic checklist rules do.
 
 These are the projectibility claims. If the paper cannot state them clearly, it will drift back into mechanisms or clustering as the payoff.
 
@@ -54,12 +57,12 @@ The paper can discuss excluded cases, but they should not be smuggled into the e
 
 ## Theory Decision
 
-The paper should be theory-plus-one-test, not theory-only and not a methods paper.
+The paper should be theory-plus-two-linked-tests, not theory-only and not a methods paper.
 
 That means:
 
-1. one bounded confirmatory corpus section
-2. no participant collection
+1. one bounded confirmatory corpus-transfer study
+2. one bounded external-validation judgment study
 3. no large-scale LLM annotation pipeline in the main paper
 4. no custom mixed-membership model as the paper's main empirical contribution
 
@@ -249,6 +252,63 @@ This design tests projectibility directly:
 
 That is closer to the paper's theoretical payoff than a full latent-mixture model is.
 
+## External Validation Study
+
+The corpus section should no longer carry the entire projectibility argument by itself.
+
+Add a second, independent validation study with human judgments.
+
+### Purpose
+
+`Study 2` should test whether the transferred passive-family probabilities from `Study 1` predict linguistic behavior that is not used in the corpus labels:
+
+1. structural licensing behavior associated with verbal passives
+2. discourse-fit behavior associated with passive information packaging
+
+This is the cleanest way to answer the circularity objection and to make the HPC payoff purpose-indexed rather than merely classificatory.
+
+### Scope
+
+Build a stimulus bank of `108` items:
+
+1. 18 `core`
+2. 18 `foil`
+3. 18 `get`
+4. 18 `prepositional`
+5. 18 `reduced_embedded`
+6. 18 `stative_adjectival`
+
+Balance across EWT and GUM as closely as possible.
+
+### Task A: Structural Licensing
+
+Participants should judge whether a target sentence supports a verbal-passive-style continuation:
+
+1. canonical `by` phrase where semantically coherent
+2. agentive adverb continuation where a `by` phrase would be awkward
+
+This gives an external target for the structural side of the passive family.
+
+### Task B: Discourse Fit
+
+Participants should judge the same target sentence after:
+
+1. a patient-given context
+2. an agent-given context
+
+The discourse prediction is not that every boundary subtype behaves like the core. The prediction is that the transferred passive-family probabilities should track where patient-given packaging remains a good fit.
+
+### Size
+
+This should be a real companion study, not a token validation check.
+
+Recommended size:
+
+1. `Study 2A`: two lists of 54 items, 72 participants total
+2. `Study 2B`: four lists of 54 items, 96 participants total
+
+That is large enough to estimate subtype patterns without turning the paper into a participant-heavy methods project.
+
 ## What To Report
 
 ### Confirmatory
@@ -257,6 +317,8 @@ That is closer to the paper's theoretical payoff than a full latent-mixture mode
 2. posterior passive-family probabilities for core cases, foils, and peripheral cases
 3. whether the peripheral set sits between the core and foil distributions rather than collapsing into one side
 4. results on the naturally distributed held-out slice
+5. external-validation results on structural licensing judgments
+6. external-validation results on discourse-fit judgments
 
 ### Exploratory
 
@@ -271,12 +333,15 @@ The paper should state these explicitly.
 3. If peripheral cases do not occupy an intermediate probability region, the graded-family claim is weakened.
 4. If the informative cues are unstable across corpora, the maintenance/projectibility story is weakened.
 5. If the evidence supports only a crisp core plus excluded non-members, the paper should say that honestly instead of forcing an HPC reading on every passive-adjacent construction.
+6. If transferred passive-family probabilities do not predict external structural-licensing or discourse-fit behavior better than checklist rules, the paper should narrow its claim to corpus projectibility only.
 
 ## Success Criteria
 
 The confirmatory section should pre-register what counts as support for projectibility.
 
-Projectibility is supported only if all of the following hold:
+Full projectibility support now requires both studies to succeed.
+
+`Study 1` support requires all of the following:
 
 1. the Bayesian cue-bundle model beats the strict checklist baseline on Brier score in both transfer directions
 2. the Bayesian cue-bundle model also beats the stronger rule-based comparator in at least one transfer direction and does not lose clearly in the other
@@ -284,17 +349,23 @@ Projectibility is supported only if all of the following hold:
 4. at least 60% of peripheral tokens fall in the middle-probability region `[0.2, 0.8]`
 5. at least 80% of core tokens fall above `0.8` and at least 80% of foil tokens fall below `0.2`
 
-These thresholds are deliberately explicit so the paper cannot move the goalposts after seeing the data.
+`Study 2` support requires:
+
+1. transferred passive-family probabilities positively predict structural-licensing judgments
+2. transferred passive-family probabilities positively predict patient-given discourse fit
+3. those transferred probabilities outperform checklist rules on both external targets
+
+These thresholds should be made explicit in the preregistration so the paper cannot move the goalposts after seeing the data.
 
 ## Linguistic Payoff Beyond Model Fit
 
-The paper still needs to say what the probabilistic analysis buys linguistically, not just statistically.
+The paper still needs to say what the combined two-study design buys linguistically, not just statistically.
 
 The introduction and conclusion should commit to at least three non-model inferences:
 
 1. passive-family membership should support better judgments about which borderline constructions are reasonable extensions of the passive family
-2. passive-family membership should support better discourse predictions about where agent suppression or expression is likely to remain acceptable
-3. passive-family membership should support the claim that apparent boundary mess is structured enough to travel across corpora rather than collapsing into corpus-specific definitions
+2. passive-family membership should support better discourse predictions about where patient-given packaging remains acceptable
+3. passive-family membership should support the claim that apparent boundary mess is structured enough to travel across corpora and into independent judgments rather than collapsing into corpus-specific definitions
 
 Mechanisms matter only insofar as they explain why these inductive warrants hold. They are not the payoff of the paper.
 
@@ -312,11 +383,13 @@ The outline should change accordingly.
    Make projectibility the payoff, not a decorative add-on.
 5. English passive as a cue-bundle construction family
    Present the frozen cue inventory and the logic of the family resemblance claim.
-6. Bounded corpus test
+6. Study 1: bounded corpus transfer test
    Compare checklist versus cue-bundle transfer across EWT and GUM.
-7. Discussion
+7. Study 2: external validation
+   Test structural licensing and discourse-fit payoffs against independent judgments.
+8. Discussion
    Separate linguistic passive from pedagogical `passive` and passive-heavy prose.
-8. Conclusion
+9. Conclusion
    State what the passive category lets us predict, and what the study does not show.
 
 ## Not For This Version

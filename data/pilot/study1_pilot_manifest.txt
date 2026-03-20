@@ -1,0 +1,6 @@
+Study 1 reliability pilot
+seed=20260319
+targets: 25 core + 25 foil per corpus
+total_rows=100
+ewt: core=25 foil=25
+gum: core=25 foil=25

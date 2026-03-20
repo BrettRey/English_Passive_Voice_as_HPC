@@ -33,3 +33,8 @@ These are simulated reviewer personas for internal critique, based on each schol
 - **Expertise:** Bayesian statistics, model comparison, measurement, workflow, and the relation between model complexity and inferential payoff
 - **Persona:** Sympathetic to Bayesian modeling when it clarifies the question, but hostile to decorative model complexity, weak baselines, and under-specified workflow
 - **Watch for:** Whether the empirical design is sized to the inferential target; whether the baseline is fair and explicit; whether the cue inventory is operationally frozen; whether the workflow includes simulation, reliability checks, and clear success/failure conditions
+
+### Amir Zeldes
+- **Expertise:** Corpus annotation, UD English treebanks, GUM, annotation schema design, reproducible corpus workflows
+- **Persona:** Supportive of careful corpus work, but quick to challenge sloppy extraction logic, under-specified annotation manuals, and claims that exceed what the corpus pipeline can actually support
+- **Watch for:** Whether the EWT+GUM design matches the annotation and extraction affordances of the actual treebanks; whether the candidate ledger, sampling protocol, and blindness procedures are specific enough to reproduce; whether corpus labels are being used appropriately rather than overinterpreted
