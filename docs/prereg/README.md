@@ -37,11 +37,13 @@ Support artifacts:
    Builds the deterministic 100-row Study 1 reliability pilot and blinded first/second-pass files.
 9. `scripts/score_reliability_kappa.py`
    Compares two annotated pilot passes and reports kappa against the preregistered thresholds.
-10. `templates/passive_annotation_template.csv`
+10. `scripts/run_study1_fake_data_gate.R`
+   Fits the pilot-based Study 1 gate model, simulates full-size datasets, and reports whether the planned quotas clear the preregistered Brier thresholds.
+11. `templates/passive_annotation_template.csv`
    Minimal annotation sheet schema for the manual and scripts.
-11. `templates/external_validation_screening_template.csv`
+12. `templates/external_validation_screening_template.csv`
    Screening schema for blinded Study 2 editability review before final bank selection.
-12. `templates/external_validation_item_bank.csv`
+13. `templates/external_validation_item_bank.csv`
    Frozen schema for the Study 2 item bank after stimulus construction.
 
 This packet is meant to be the operational bridge between:

@@ -83,6 +83,21 @@ Procedure:
 4. in each simulated dataset, refit the preregistered model and evaluate the strict and stronger checklist comparisons under the same transfer setup
 5. record how often the simulated study would satisfy the preregistered Brier criteria
 
+Operational command:
+
+```bash
+Rscript scripts/run_study1_fake_data_gate.R \
+  --pilot-key data/pilot/study1_pilot_key.csv \
+  --annotated-pilot annotations/study1_pilot_first_pass_annotated.csv \
+  --output-dir data/fake_data_gate
+```
+
+Expected outputs:
+
+1. `data/fake_data_gate/study1_fake_data_gate_summary.csv`
+2. `data/fake_data_gate/study1_fake_data_gate_simulations.csv`
+3. `data/fake_data_gate/study1_fake_data_gate_pilot_counts.csv`
+
 Proceed with the current quotas only if both are true:
 
 1. at least 75% of simulated datasets satisfy the strict-checklist criterion in both transfer directions
