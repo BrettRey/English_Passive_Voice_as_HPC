@@ -127,6 +127,15 @@ Before sampling, drop rows only if any of the following holds:
 
 Do not exclude difficult linguistic cases at this stage.
 
+Before annotation begins, run a manual-probe richness check:
+
+```bash
+python scripts/check_manual_probe_pool.py \
+  --input data/passive_candidate_ledger.csv
+```
+
+This report is a sanity gate, not an automatic subtype classifier. Use it to confirm that the `peripheral_manual_probe` pool is large and structurally varied enough to make the preregistered prepositional and stative/adjectival minima plausible before annotation effort is committed. In particular, inspect the bare-participial no-auxpass counts alongside the `obl` and `nsubj:pass` heuristics before locking the annotation schedule.
+
 ## Randomization Policy
 
 Use one global seed:
@@ -175,6 +184,8 @@ Procedure:
 2. draw 40 rows per corpus without class balancing
 3. label them `sample_set = heldout`
 4. remove them from later analytic sampling
+
+The held-out target remains fixed at 40 rows per corpus after annotation. If exclusions reduce the usable held-out slice below 40 for either corpus, the finalizer must fail and the shortfall must be logged as a prereg deviation rather than silently changing the held-out size.
 
 This slice reflects prevalence within the passive-adjacent candidate space, not within all English clauses.
 
@@ -248,6 +259,10 @@ The foil replacement queue continues from the leftovers with this fixed cycle:
 4. `foil_participial_modifier`
 5. `foil_perfect`
 
+Known constraint:
+
+`foil_copular_participle` is expected to be the smallest foil source, partly because some treebank rows that are foil-like on linguistic inspection still carry `Voice=Pass` and therefore do not enter that stream. The foil cycles degrade gracefully if the copular queue is exhausted, but any resulting underrepresentation of copular participles should be reported explicitly rather than discovered post hoc.
+
 ## Annotation And Replacement Workflow
 
 1. annotate the full primary pack first
@@ -268,7 +283,7 @@ python scripts/finalize_annotated_sample.py \
   --output data/final_preregistered_sample.csv
 ```
 
-The finalizer must fail loudly if any analytic target or peripheral subtype minimum is not satisfied.
+The finalizer must fail loudly if any held-out target, analytic target, or peripheral subtype minimum is not satisfied.
 
 ## Final Target Counts
 

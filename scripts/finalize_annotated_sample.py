@@ -11,6 +11,7 @@ from pathlib import Path
 CORE_TARGET = 60
 FOIL_TARGET = 60
 PERIPHERAL_TARGET = 40
+HELDOUT_TARGET = 40
 CORPORA = ("ewt", "gum")
 
 SAMPLE_SET_ORDER = {
@@ -129,11 +130,18 @@ def main() -> None:
 
     final_rows = []
 
-    heldout = sorted(
-        [row for row in rows if row.get("sample_set") == "heldout" and row.get("family_status") != "exclude"],
-        key=lambda row: (row["corpus"], int(row["sample_rank"])),
-    )
-    final_rows.extend(heldout)
+    for corpus in CORPORA:
+        heldout_rows = sorted(
+            [
+                row for row in rows
+                if row.get("corpus") == corpus
+                and row.get("sample_set") == "heldout"
+                and row.get("family_status") != "exclude"
+            ],
+            key=rank_key,
+        )
+        require_exact(heldout_rows, HELDOUT_TARGET, "heldout", corpus)
+        final_rows.extend(first_n(heldout_rows, HELDOUT_TARGET))
 
     for corpus in CORPORA:
         core_rows = first_n(corpus_class_rows(rows, corpus, "core", "analytic_core_"), CORE_TARGET)

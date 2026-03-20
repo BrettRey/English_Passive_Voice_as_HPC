@@ -29,13 +29,19 @@ Support artifacts:
    Applies the deterministic checklist baselines to an annotated CSV.
 5. `scripts/build_external_validation_lists.py`
    Builds deterministic participant lists for the structural and discourse tasks in Study 2.
-6. `scripts/build_study1_pilot.py`
+6. `scripts/check_manual_probe_pool.py`
+   Reports ledger-level sanity counts for the manual-probe pool before annotation begins.
+7. `scripts/build_external_validation_item_bank.py`
+   Builds the frozen Study 2 item bank from a blinded screened pool under the preregistered selection rule.
+8. `scripts/build_study1_pilot.py`
    Builds the deterministic 100-row Study 1 reliability pilot and blinded first/second-pass files.
-7. `scripts/score_reliability_kappa.py`
+9. `scripts/score_reliability_kappa.py`
    Compares two annotated pilot passes and reports kappa against the preregistered thresholds.
-8. `templates/passive_annotation_template.csv`
+10. `templates/passive_annotation_template.csv`
    Minimal annotation sheet schema for the manual and scripts.
-9. `templates/external_validation_item_bank.csv`
+11. `templates/external_validation_screening_template.csv`
+   Screening schema for blinded Study 2 editability review before final bank selection.
+12. `templates/external_validation_item_bank.csv`
    Frozen schema for the Study 2 item bank after stimulus construction.
 
 This packet is meant to be the operational bridge between:

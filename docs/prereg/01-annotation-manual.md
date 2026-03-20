@@ -158,6 +158,8 @@ Values:
 
 Use `yes` when the candidate head is functioning as a past-participial predicate or reduced predicative modifier.
 
+This cue is morphosyntactic, not passive-specific. Perfect-participle foils can still receive `participial_predicate = yes` if the extracted head is genuinely functioning as the participial predicate under analysis.
+
 Use `no` when sentence inspection shows that the extracted token is not the predicate under analysis.
 
 ### 3. Agent Realization
@@ -291,11 +293,15 @@ Use these defaults to avoid silent drift:
 
 Before confirmatory fitting:
 
-1. annotate a pilot batch of 100 rows:
+1. annotate a fit-gate pilot batch of 100 rows:
    25 `core` and 25 `foil` candidates from EWT, plus 25 `core` and 25 `foil` candidates from GUM
-2. wait at least 14 days
-3. re-annotate the same 100 rows blind to the first pass
-4. compute kappa for each cue, `family_status`, and `peripheral_subtype`
+2. annotate a separate 16-row boundary mini-pilot:
+   per corpus, 2 `peripheral_get`, 2 `peripheral_reduced_embedded`, and 4 `peripheral_manual_probe` candidates
+3. keep the coder-facing sheets blind to `candidate_id`; use the generated `pilot_item_id` instead
+4. wait at least 14 days
+5. re-annotate both pilots blind to the first pass
+6. compute kappa for each confirmatory cue and for `family_status` on the 100-row fit-gate pilot
+7. compute `peripheral_subtype` kappa on the 16-row boundary mini-pilot
 
 Targets:
 
@@ -314,6 +320,13 @@ python scripts/score_reliability_kappa.py \
   --first annotations/study1_pilot_first_pass_annotated.csv \
   --second annotations/study1_pilot_second_pass_annotated.csv \
   --output data/pilot/study1_pilot_reliability.csv \
+  --require-thresholds
+
+python scripts/score_reliability_kappa.py \
+  --first annotations/study1_boundary_pilot_first_pass_annotated.csv \
+  --second annotations/study1_boundary_pilot_second_pass_annotated.csv \
+  --output data/pilot/study1_boundary_pilot_reliability.csv \
+  --fields peripheral_subtype \
   --require-thresholds
 ```
 

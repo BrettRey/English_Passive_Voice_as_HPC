@@ -35,10 +35,17 @@ THRESHOLDS = {
 }
 
 
-def read_rows(path: Path) -> dict[str, dict[str, str]]:
+def join_key(rows: list[dict[str, str]]) -> str:
+    if rows and "pilot_item_id" in rows[0]:
+        return "pilot_item_id"
+    return "candidate_id"
+
+
+def read_rows(path: Path) -> tuple[str, dict[str, dict[str, str]]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
-    return {row["candidate_id"]: row for row in rows}
+    key_field = join_key(rows)
+    return key_field, {row[key_field]: row for row in rows}
 
 
 def cohen_kappa(first: list[str], second: list[str]) -> float:
@@ -61,29 +68,46 @@ def format_float(value: float) -> str:
     return f"{value:.3f}"
 
 
+def selected_fields(raw: str | None) -> tuple[str, ...]:
+    if not raw:
+        return FIELDS
+    requested = tuple(field.strip() for field in raw.split(",") if field.strip())
+    unknown = [field for field in requested if field not in FIELDS]
+    if unknown:
+        raise SystemExit("Unknown reliability field(s): " + ", ".join(unknown))
+    return requested
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--first", required=True, type=Path)
     parser.add_argument("--second", required=True, type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--fields", help="Comma-separated subset of fields to score")
     parser.add_argument("--require-thresholds", action="store_true")
     args = parser.parse_args()
 
-    first_rows = read_rows(args.first)
-    second_rows = read_rows(args.second)
+    first_key, first_rows = read_rows(args.first)
+    second_key, second_rows = read_rows(args.second)
+
+    if first_key != second_key:
+        raise SystemExit(
+            f"Reliability scoring failed: first file uses {first_key}, second file uses {second_key}"
+        )
 
     if set(first_rows) != set(second_rows):
         only_first = sorted(set(first_rows) - set(second_rows))[:5]
         only_second = sorted(set(second_rows) - set(first_rows))[:5]
         raise SystemExit(
-            "Reliability scoring failed: candidate_id sets differ. "
+            f"Reliability scoring failed: {first_key} sets differ. "
             f"only_first={only_first} only_second={only_second}"
         )
 
     results = []
     failures = []
+    fields = selected_fields(args.fields)
 
-    for field in FIELDS:
+    for field in fields:
         paired = [
             (first_rows[candidate_id].get(field, "").strip(), second_rows[candidate_id].get(field, "").strip())
             for candidate_id in sorted(first_rows)

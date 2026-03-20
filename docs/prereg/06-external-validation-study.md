@@ -23,6 +23,11 @@ For each `Study 2` item, derive three preregistered predictors from `Study 1`:
 
 `Study 2` therefore does not use same-corpus fitted probabilities. It uses the transferred predictions that `Study 1` claims are projectible.
 
+Temporal freeze rule:
+
+1. screen and freeze the `Study 2` item bank before the final `Study 1` transferred probabilities are attached
+2. if the final `Study 1` model changes because a cue is dropped on reliability grounds, recompute `study1_transferred_prob` after bank selection but do not reopen screening, probe writing, or item substitution
+
 ## Item Bank
 
 Build a frozen `Study 2` item bank of `108` base items:
@@ -34,7 +39,12 @@ Build a frozen `Study 2` item bank of `108` base items:
 5. `18` `reduced_embedded`
 6. `18` `stative_adjectival`
 
-Balance across EWT and GUM as closely as possible.
+Target exact corpus balance within each group:
+
+1. `9` EWT-origin items
+2. `9` GUM-origin items
+
+If exact `9/9` balance is impossible after blinded editability screening for a group, allow a maximum fallback imbalance of `10/8`. Any larger imbalance is a prereg deviation and the item bank must fail to build automatically.
 
 If the finalized `Study 1` analytic sample does not supply enough editable items for a subtype, continue annotation down the same-corpus replacement queues before recording a prereg deviation.
 
@@ -48,6 +58,22 @@ Select `Study 2` items from manually annotated rows only:
 Each `Study 2` item must map to exactly one `candidate_id`.
 
 Do not use unannotated rows.
+
+## Screening And Deterministic Selection
+
+The item bank must not be hand-curated after the transferred probabilities are known.
+
+Use this order:
+
+1. build a screening ledger from manually annotated candidate rows
+2. hide `study1_transferred_prob`, `strict_checklist`, and `stronger_rule` from the screener during editability review
+3. screen each candidate as `eligible` or `ineligible`
+4. record an exclusion reason for every `ineligible` row
+5. freeze the screened pool before any final bank selection
+6. within each `group_label`, select the final bank by seeded randomization subject to the corpus-balance rule above
+7. only after the bank is frozen may the transferred probabilities and checklist columns be reattached for analysis
+
+The deterministic item-bank builder is the authoritative source for final selection. Manual substitutions after the builder runs are not allowed without a logged prereg deviation.
 
 ## Editability Rules
 
@@ -72,9 +98,13 @@ Disallowed edits:
 2. changing the construction subtype used for sampling
 3. adding or deleting core argument-structure material in the target sentence
 
+All editability screening and probe/context writing must be completed blind to `study1_transferred_prob`.
+
 ## Item-Bank Schema
 
-Freeze the stimulus bank in `templates/external_validation_item_bank.csv`.
+Screen candidates in `templates/external_validation_screening_template.csv`.
+
+Freeze the final selected bank in `templates/external_validation_item_bank.csv`.
 
 Each row must include:
 
@@ -82,18 +112,23 @@ Each row must include:
 2. `source_candidate_id`
 3. `origin_corpus`
 4. `group_label`
-5. `base_sentence`
-6. `base_sentence_marked`
-7. `structural_probe_type`
-8. `structural_probe_text`
-9. `discourse_context_patient`
-10. `discourse_context_agent`
-11. `include_structural`
-12. `include_discourse`
-13. `study1_transferred_prob`
-14. `strict_checklist`
-15. `stronger_rule`
-16. `notes`
+5. `screen_status`
+6. `screen_exclusion_reason`
+7. `selection_rank`
+8. `base_sentence`
+9. `base_sentence_marked`
+10. `structural_probe_type`
+11. `structural_probe_text`
+12. `discourse_context_patient`
+13. `discourse_context_agent`
+14. `include_structural`
+15. `include_discourse`
+16. `study1_transferred_prob`
+17. `strict_checklist`
+18. `stronger_rule`
+19. `notes`
+
+During stimulus construction, `include_structural` and `include_discourse` must be filled explicitly with `1` or `0` before list building.
 
 ## Task A: Structural Licensing
 
@@ -110,9 +145,18 @@ Each item receives exactly one frozen structural continuation:
 1. `by_phrase`
    Add a short canonical `by` phrase when semantically coherent.
 2. `agentive_adverb`
-   Add an agentive adverb such as `deliberately`, `carefully`, or `intentionally` when a `by` phrase would be awkward or overly lexicalized.
+   Add one adverb from the approved inventory when a `by` phrase would be awkward or overly lexicalized.
 
 The target sentence itself remains unchanged. Only the continuation is added.
+
+Probe-construction protocol:
+
+1. prefer `by_phrase` when a short generic human agent can be written without changing the event structure
+2. otherwise use `agentive_adverb`
+3. for `agentive_adverb`, choose only from this frozen inventory:
+   `deliberately`, `carefully`, `intentionally`, `systematically`
+4. complete probe writing before the transferred probabilities are consulted
+5. record the final choice in the frozen item bank and do not revise probes after list building begins
 
 ### Participant Task
 
@@ -191,6 +235,11 @@ Minimum analyzable total after exclusions:
 
 1. `80`
 
+Combined participant target across both tasks:
+
+1. `168` total participants
+2. with non-overlapping participant pools for Task A and Task B
+
 ## Participant Eligibility
 
 For both tasks:
@@ -198,7 +247,8 @@ For both tasks:
 1. age `18` or older
 2. self-identified native or near-native English speaker
 3. located in an English-dominant country or with equivalent long-term English exposure
-4. no prior participation in the other list of the same task
+4. no prior participation in any Study 2 list
+5. a participant may complete Task A or Task B, but never both
 
 ## Participant Exclusions
 
@@ -237,7 +287,7 @@ Treat ratings as approximately continuous on the `1` to `7` scale.
 
 Fit a Bayesian multilevel Gaussian model:
 
-`rating_ij = alpha + beta_1 * study1_transferred_prob_j + beta_2 * probe_type_j + u_i + v_j + error_ij`
+`rating_ij = alpha + beta_1 * study1_transferred_prob_j + beta_2 * probe_type_j + beta_3 * origin_corpus_j + u_i + v_j + error_ij`
 
 where:
 
@@ -249,11 +299,22 @@ Fit two comparison models by replacing `study1_transferred_prob_j` with:
 1. `strict_checklist`
 2. `stronger_rule`
 
+Planned robustness check:
+
+Also fit ordinal sensitivity models as a non-confirmatory robustness analysis. The preregistered confirmatory analysis remains Gaussian for interpretability and comparability across tasks.
+
 ### Task B Model
 
 Fit a Bayesian multilevel Gaussian model:
 
-`rating_ij = alpha + beta_1 * patient_context_ij + beta_2 * study1_transferred_prob_j + beta_3 * patient_context_ij * study1_transferred_prob_j + u_i + v_j + error_ij`
+`rating_ij = alpha + beta_1 * patient_context_ij + beta_2 * study1_transferred_prob_j + beta_3 * patient_context_ij * study1_transferred_prob_j + beta_4 * origin_corpus_j + u_i + u_i^{(patient)} + v_j + v_j^{(patient)} + error_ij`
+
+where:
+
+1. `u_i` is a varying intercept for participant
+2. `u_i^{(patient)}` is a varying slope for `patient_context` by participant
+3. `v_j` is a varying intercept for item
+4. `v_j^{(patient)}` is a varying slope for `patient_context` by item
 
 Fit two comparison models by replacing `study1_transferred_prob_j` with:
 
@@ -285,7 +346,23 @@ If `Study 1` succeeds but `Study 2` fails, narrow the paper's claim to corpus pr
 
 If `Study 2` succeeds on structural licensing but not discourse fit, claim structural extension only and do not overstate discourse payoffs.
 
-## Deterministic List Building
+## Deterministic Item-Bank And List Building
+
+Build the final frozen item bank with:
+
+```bash
+python scripts/build_external_validation_item_bank.py \
+  --input stimuli/external_validation_screening.csv \
+  --output stimuli/external_validation_item_bank.csv
+```
+
+The item-bank builder must:
+
+1. fail loudly if the screened pool is not large enough for any `group_label`
+2. enforce exact `9/9` corpus balance where possible
+3. allow only `10/8` as the maximum automatic fallback imbalance for a group
+4. record deterministic `selection_rank` values under the global seed
+5. ignore `study1_transferred_prob` during selection except to carry it through to the frozen final bank after selection is complete
 
 Build the participant lists with:
 

@@ -90,6 +90,8 @@ Proceed with the current quotas only if both are true:
 
 If either condition fails, do not file the preregistration unchanged. Raise `core + foil` quotas, reduce predictor complexity, or both.
 
+The separate 16-row boundary mini-pilot is for subtype reliability only. It does not replace the 100-row `core + foil` fit-gate pilot used in the fake-data adequacy check.
+
 ## Decision Rule
 
 Proceed with the current 400-row total only if all of the following hold after ledger construction and pilot annotation:

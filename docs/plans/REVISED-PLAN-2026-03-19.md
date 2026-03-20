@@ -161,7 +161,7 @@ Before confirmatory fitting:
 
 1. write a short annotation manual with hard decision rules and tie-breakers for all seven cues
 2. hide corpus identity and provisional class labels from the coder where possible during coding
-3. double-code 50 tokens after a time lag as an intra-rater reliability check
+3. in the operational prereg packet, use a 100-row fit-gate pilot plus a 16-row boundary mini-pilot instead of the earlier 50-token sketch
 4. if a second blind human coder becomes available, use that as a stronger reliability check, but do not make the paper depend on it
 5. set a minimum reliability target of kappa at or above 0.80 for each cue used in the confirmatory model
 

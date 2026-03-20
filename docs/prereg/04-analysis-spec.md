@@ -182,6 +182,8 @@ Projectibility is supported only if all are true:
 6. at least 80% of pooled `core` rows have posterior-mean predicted probability above `0.8`
 7. at least 80% of pooled `foil` rows have posterior-mean predicted probability below `0.2`
 
+The strict-checklist threshold is intentionally harder than the stronger-rule threshold. The strict checklist is the weaker comparator, so the preregistration requires a larger and more certain Bayesian advantage there; the stronger rule is closer to the cue-bundle model, so a smaller advantage with wider uncertainty is acceptable.
+
 If criterion 1 fails in either direction, do not claim confirmatory projectibility support.
 
 If criteria 1 through 4 hold but the gradedness criteria fail, the study may support transfer but not the stronger boundary-structure claim.
