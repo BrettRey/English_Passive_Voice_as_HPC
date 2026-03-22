@@ -41,19 +41,21 @@ That means the binary training set in each transfer direction is:
 Maximum coefficient count under the current coding scheme:
 
 1. intercept: 1
-2. `auxiliary_type`: 2
-3. `participial_predicate`: 1
-4. `agent_realization`: 2
-5. `promotion_type`: 2
-6. `eventive_stative`: 2
-7. `syntactic_environment`: 1
-8. `subject_role_profile`: 2
+2. `participial_form`: 2
+3. `licensing_marker`: 5
+4. `constructional_environment`: 6
+5. `local_subject_present`: 1
+6. `by_pp_present`: 1
+7. `stranded_preposition`: 1
+8. `event_implied`: 2
+9. `agent_implied`: 2
+10. `predicand_as_undergoer`: 2
 
 Maximum total:
 
-1. 13 coefficients
+1. 22 coefficients
 
-At `n = 120` training rows per direction, this is roughly `9.2` rows per coefficient before any benefit from regularizing priors.
+At `n = 120` training rows per direction, this is roughly `5.5` rows per coefficient before any benefit from regularizing priors.
 
 ## Interpretation
 
@@ -70,6 +72,7 @@ Why caution remains warranted:
 
 1. some predictor levels may be sparse within one corpus
 2. the fit set per direction is smaller than the total annotated sample makes it look
+3. the restructured cue set is more interpretable, but it is also larger
 
 ## Fake-Data Gate
 
@@ -78,10 +81,12 @@ Before full annotation is locked, run a bounded fake-data adequacy check using t
 Procedure:
 
 1. annotate and reliability-check an initial 100-row pilot with 25 `core` and 25 `foil` rows from each corpus
-2. fit the preregistered Bayesian logistic model to the pilot `core + foil` rows
-3. use posterior draws from that pilot fit as generating parameters for at least 200 simulated datasets at the planned per-corpus quotas
-4. in each simulated dataset, refit the preregistered model and evaluate the strict and stronger checklist comparisons under the same transfer setup
-5. record how often the simulated study would satisfy the preregistered Brier criteria
+2. if reclassification to `peripheral` leaves a corpus below 25 usable `core` or `foil` rows, draw a deterministic supplement from unused candidates of the affected class and annotate it once
+3. fit the preregistered Bayesian logistic model to the usable pilot `core + foil` rows, including any supplement rows drawn under step 2
+4. use posterior draws from that pilot fit as generating parameters for at least 200 simulated datasets at the planned per-corpus quotas
+5. in each simulated dataset, refit the preregistered model and evaluate the strict and stronger checklist comparisons under the same transfer setup
+6. record how often the simulated study would satisfy the preregistered Brier criteria
+7. if either gate estimate lands within `0.02` of its decision threshold, rerun the gate at `1000` simulations and use that higher-resolution estimate for the preregistration decision
 
 Operational command:
 
@@ -90,6 +95,13 @@ Rscript scripts/run_study1_fake_data_gate.R \
   --pilot-key data/pilot/study1_pilot_key.csv \
   --annotated-pilot annotations/study1_pilot_first_pass_annotated.csv \
   --output-dir data/fake_data_gate
+```
+
+If a supplement was needed, add:
+
+```bash
+  --supplement-key data/pilot/study1_pilot_supplement_key.csv \
+  --supplement-annotated annotations/study1_pilot_supplement_annotated.csv \
 ```
 
 Expected outputs:
@@ -103,9 +115,11 @@ Proceed with the current quotas only if both are true:
 1. at least 75% of simulated datasets satisfy the strict-checklist criterion in both transfer directions
 2. at least 60% of simulated datasets satisfy the stronger-rule criterion in both transfer directions
 
+The `200`-simulation run is the minimum gate. It is adequate for clear passes or clear failures, but it is not the final decision surface for near-threshold cases. In the current v2 pilot, the corrected surface-based baseline produced a borderline `200`-simulation result (`strict_pass_rate = 0.745`, `stronger_pass_rate = 0.835`), so the gate was rerun at `1000` simulations. That higher-resolution rerun yielded `strict_pass_rate = 0.788` and `stronger_pass_rate = 0.844`, which is the result that governs the preregistration decision.
+
 If either condition fails, do not file the preregistration unchanged. Raise `core + foil` quotas, reduce predictor complexity, or both.
 
-The separate 16-row boundary mini-pilot is for subtype reliability only. It does not replace the 100-row `core + foil` fit-gate pilot used in the fake-data adequacy check.
+The separate 16-row boundary mini-pilot is for subtype reliability only. It consists of 8 passive-boundary rows plus 8 fixed comparison-construction items, and it does not replace the 100-row `core + foil` fit-gate pilot used in the fake-data adequacy check. If fit-gate reclassification creates a usable-count shortfall, the deterministic supplement above repairs the gate input without changing the reliability basis.
 
 ## Decision Rule
 

@@ -34,17 +34,23 @@ Support artifacts:
 7. `scripts/build_external_validation_item_bank.py`
    Builds the frozen Study 2 item bank from a blinded screened pool under the preregistered selection rule.
 8. `scripts/build_study1_pilot.py`
-   Builds the deterministic 100-row Study 1 reliability pilot and blinded first/second-pass files.
+   Builds the deterministic 100-row Study 1 reliability pilot plus the 16-row boundary mini-pilot, including fixed comparison-construction items.
 9. `scripts/score_reliability_kappa.py`
    Compares two annotated pilot passes and reports kappa against the preregistered thresholds.
 10. `scripts/run_study1_fake_data_gate.R`
-   Fits the pilot-based Study 1 gate model, simulates full-size datasets, and reports whether the planned quotas clear the preregistered Brier thresholds.
+   Fits the pilot-based Study 1 gate model, simulates full-size datasets, and reports whether the planned quotas clear the preregistered Brier thresholds. Accepts an optional fit-gate supplement and a higher `--simulations` setting for near-threshold reruns.
 11. `templates/passive_annotation_template.csv`
    Minimal annotation sheet schema for the manual and scripts.
 12. `templates/external_validation_screening_template.csv`
    Screening schema for blinded Study 2 editability review before final bank selection.
 13. `templates/external_validation_item_bank.csv`
    Frozen schema for the Study 2 item bank after stimulus construction.
+14. `data/pilot/study1_comparison_item_bank.csv`
+   Fixed comparison-construction bank used in the 16-row Study 1 boundary mini-pilot.
+15. `scripts/prefill_v2_pilot_sheet.py`
+   Prefills deterministic v2 pilot cues so annotation can focus on the remaining semantic judgments and hard cases.
+16. `scripts/build_study1_fit_gate_supplement.py`
+   Builds a deterministic one-pass fit-gate supplement when pilot reclassification leaves a corpus short of usable `core` or `foil` rows.
 
 This packet is meant to be the operational bridge between:
 

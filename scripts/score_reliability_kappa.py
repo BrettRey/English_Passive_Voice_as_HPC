@@ -11,25 +11,29 @@ from pathlib import Path
 
 
 FIELDS = (
-    "auxiliary_type",
-    "participial_predicate",
-    "agent_realization",
-    "promotion_type",
-    "eventive_stative",
-    "syntactic_environment",
-    "subject_role_profile",
+    "participial_form",
+    "licensing_marker",
+    "constructional_environment",
+    "local_subject_present",
+    "by_pp_present",
+    "stranded_preposition",
+    "event_implied",
+    "agent_implied",
+    "predicand_as_undergoer",
     "family_status",
     "peripheral_subtype",
 )
 
 THRESHOLDS = {
-    "auxiliary_type": 0.80,
-    "participial_predicate": 0.80,
-    "agent_realization": 0.80,
-    "promotion_type": 0.80,
-    "eventive_stative": 0.80,
-    "syntactic_environment": 0.80,
-    "subject_role_profile": 0.80,
+    "participial_form": 0.80,
+    "licensing_marker": 0.80,
+    "constructional_environment": 0.80,
+    "local_subject_present": 0.80,
+    "by_pp_present": 0.80,
+    "stranded_preposition": 0.80,
+    "event_implied": 0.70,
+    "agent_implied": 0.70,
+    "predicand_as_undergoer": 0.70,
     "family_status": 0.80,
     "peripheral_subtype": 0.70,
 }

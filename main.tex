@@ -47,6 +47,152 @@ TODO: Write conclusion.
 % Check model names: frontier models change frequently (e.g., GPT-4 → GPT-4o → o3).
 This paper was drafted with the assistance of large language models. All content has been reviewed and revised by the author, who takes full responsibility for the final text.
 
+\newpage
+\appendix
+
+\section{From mixed cues to form/meaning split}\label{app:cue-restructuring}
+
+The annotation scheme used in the confirmatory study went through a substantial revision between the boundary pilot and the confirmatory round. This appendix documents what the original scheme looked like, what the pilot exposed, and how the revised scheme was motivated.
+
+\subsection{The original scheme}
+
+The preregistered cue set contained seven coding columns plus a derived \term{peripheral subtype} label:
+
+\begin{enumerate}
+\item \term{auxiliary type} (be / get / none-other)
+\item \term{participial predicate} (yes / no)
+\item \term{agent realization} (by-phrase / other-overt-agentive / none)
+\item \term{promotion type} (direct-object-promotion / oblique-stranding-promotion / none-unclear)
+\item \term{eventive vs.\ stative} (eventive / stative / ambiguous)
+\item \term{syntactic environment} (finite-clause / nonfinite-or-reduced)
+\item \term{subject role profile} (patient-theme-like / locative-oblique-like / unclear-other)
+\end{enumerate}
+
+These cues were intended to capture the properties that cluster in prototypical passives. The scheme was designed for a Bayesian cue-bundle model that would test whether this cluster projects across corpora better than deterministic checklist baselines.
+
+\subsection{What the pilot exposed}
+
+A 16-item boundary pilot was annotated by four independent coders: the author, a base annotation, and two independent LLM agents (both Claude Opus~4.6, one with prior context and one naive). Each item was coded on 9 columns, yielding 144 cells per pair.
+
+\begin{table}[h]
+\centering
+\caption{Pairwise raw agreement on 16 boundary-pilot items (144 cells per pair)}
+\label{tab:pilot-agreement}
+\begin{tabular}{lcc}
+\hline
+Pair & Disagreements & Agreement \\
+\hline
+Opus-2 (naive) vs.\ Base & 4 & 97.2\% \\
+Opus-1 vs.\ Opus-2 (naive) & 8 & 94.4\% \\
+Opus-1 vs.\ Base & 8 & 94.4\% \\
+Author vs.\ Base & 15 & 89.6\% \\
+Author vs.\ Opus-2 (naive) & 15 & 89.6\% \\
+Author vs.\ Opus-1 & 16 & 88.9\% \\
+\hline
+\end{tabular}
+\end{table}
+
+The disagreements were not random. They clustered by column, as Table~\ref{tab:column-disagreements} shows.
+
+\begin{table}[h]
+\centering
+\caption{Disagreements by column across all six coder pairs (96 cells per column: 16 items $\times$ 6 pairs)}
+\label{tab:column-disagreements}
+\begin{tabular}{lccl}
+\hline
+Column & Level & Disagreements & Pattern \\
+\hline
+\term{auxiliary type} & morphosyntactic & 3 & one item (BP009) \\
+\term{participial predicate} & morphological & 0 & perfect agreement \\
+\term{agent realization} & mixed & 0 & perfect agreement \\
+\term{promotion type} & mixed & 14 & systematic \\
+\term{eventive vs.\ stative} & semantic & 12 & systematic \\
+\term{syntactic environment} & syntactic & 8 & two items \\
+\term{subject role profile} & semantic & 6 & three items \\
+\term{family status} & derived & 11 & cascading \\
+\term{peripheral subtype} & mixed & 12 & systematic \\
+\hline
+\end{tabular}
+\end{table}
+
+The morphosyntactic columns (\term{auxiliary type}, \term{participial predicate}, \term{agent realization}) achieved near-perfect agreement. The semantic and mixed-level columns (\term{promotion type}, \term{eventive vs.\ stative}, \term{peripheral subtype}) produced systematic disagreements across multiple items and coder pairs. The \term{family status} disagreements were cascading: they followed from upstream disagreements in the cue columns rather than from independent judgment differences about category membership.
+
+Two systematic patterns accounted for most of the variance. First, the author coded \term{promotion type} = none-unclear in five items where the other three coders coded direct-object-promotion. This reflected an interpretive question: do prenominal modifiers and reduced clauses without overt subjects count as having a promoted participant? The column mixed a syntactic question (is there a subject position?) with a semantic one (is there an undergoer?), and coders resolved the mix differently. Second, two items (\mention{do not be put off}, \mention{do you get charged}) produced disagreements on \term{syntactic environment} because the finite/non-finite distinction was ambiguous for imperatives and do-support constructions.
+
+The root cause was that the original columns conflated linguistic levels. \term{Peripheral subtype} mixed morphosyntactic criteria (\mention{get}), syntactic criteria (\mention{reduced\_embedded}, \mention{prepositional}), and semantic criteria (\mention{stative\_adjectival}) in a single column. \term{Agent realization} mixed a form question (is there a \mention{by}-PP?) with a semantic one (is it agentive?). \term{Eventive vs.\ stative} was ostensibly semantic, but coders reached for syntactic diagnostics to answer it. When form and meaning came apart~-- exactly the boundary cases the study targets~-- coders had to resolve the conflict within a single cell. This is where the disagreements appeared.
+
+\subsection{The middle-construction test}
+
+The restructuring was motivated by a simple thought experiment. Consider the middle construction: \mention{The butter spreads easily}. Under the original scheme, three of seven cues could not distinguish this from a passive: the subject corresponds to a direct-object promotion, the subject role is patient-theme-like, and the syntactic environment is a finite clause. Only the morphosyntactic cues (no participle, no auxiliary) separated the two.
+
+This showed that \term{promotion type}, \term{subject role profile}, and \term{syntactic environment} were tracking voice alternations generally, not the passive specifically. Middles, unaccusatives (\mention{The door opened}; \mention{Twenty people died}), tough-constructions (\mention{This book is easy to read}), and needs-washing constructions (\mention{The house needs painting}) all share the passive's functional properties~-- patient promotion to subject, agent suppression, topic management~-- while using entirely different formal means.
+
+The conclusion was that the form cues define the property \emph{cluster} (what makes something specifically passive), while the meaning and information-structure properties explain why the cluster is \emph{maintained} (the functional pressures that keep it in use). This is the HPC architecture: form properties are the cluster; functional properties are the homeostatic mechanisms.
+
+\subsection{The restructured scheme}
+
+The revised scheme separates cues into level-pure layers.
+
+The form cues are six observable morphosyntactic and constructional properties:
+
+\begin{enumerate}
+\item \term{participial form}: past participle, gerund-participial, or none
+\item \term{licensing marker}: be, passive \mention{get}, causative \mention{get}/\mention{have}, subordinator or adjunct, modifier position, or absent
+\item \term{constructional environment}: clausal predication, bare infinitival complement, to-infinitival complement, gerund-participial clause, adjunct participial clause, object predicative complement, or reduced modifier
+\item \term{local subject present}: yes or no
+\item \term{by-PP present}: yes or no
+\item \term{stranded preposition}: yes or no
+\end{enumerate}
+
+The meaning cues are three judgment-based semantic properties of the predicate, not the sentence:
+
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item \term{event implied}: does this predicate imply an event occurred?
+\item \term{agent implied}: is an agent or causer understood?
+\item \term{predicand as undergoer}: is the predicand the affected participant?
+\end{enumerate}
+
+The key structural change is that \term{constructional environment} replaces \term{syntactic environment} without invoking a finite/non-finite binary. It names construction types directly (clausal predication, bare infinitival complement, to-infinitival complement, etc.) rather than forcing them through a binary clause-type split. This resolved the pilot's most persistent disagreement: whether imperatives (\mention{do not be put off}) and do-support constructions (\mention{do you get charged}) should count as finite. Under the revised scheme, both are bare infinitival complements, and the question does not arise.
+
+\subsection{The comparator correction}
+
+The pilot exposed a second design problem, this time in the deterministic
+baselines rather than in the annotation columns. An initial v2 draft defined
+the strict checklist over the annotated field \term{licensing marker}. That was
+too close to the analyst's own structural judgment: the checklist was no longer
+a genuinely surface-oriented competitor, but a partial recoding of the gold
+analysis. On the corrected v2 fit-gate pilot, that version of the checklist was
+perfect on the observed \term{core}/\term{foil} rows, and the fake-data gate
+failed.
+
+The preregistered correction was to redefine the checklists over overt surface
+\mention{be}/\mention{get} material in the retained extraction metadata, plus a
+small number of annotated convenience cues. This matters methodologically. The
+goal of the comparison is not to let the Bayesian model beat a straw man, but
+it is also not to let the checklist inherit the analyst's own functional
+judgment. The corrected baseline is therefore strong, but still capable of
+overgenerating on passive-looking foils such as copular participial clauses.
+
+The first corrected fake-data run, at the minimum preregistered resolution of
+200 simulations, landed at 0.745 on the strict gate and 0.835 on the stronger
+gate. Because that strict result missed the threshold by one simulated pass, it
+was treated as a borderline Monte Carlo estimate rather than as a substantive
+design failure. A preregistered higher-resolution rerun at 1000 simulations
+yielded 0.788 and 0.844, respectively, which is the estimate used for the
+final adequacy decision.
+
+\subsection{Comparison constructions}
+
+The revised item set includes tokens from non-passive constructions that share meaning and information-structure properties with passives: middles, unaccusatives, tough-constructions, needs-washing constructions, and \mention{get} + adjective. These receive \term{family status} = foil and are coded on all cues. They test whether the form cluster holds together even when the meaning cues overlap with non-passives.
+
+The needs-washing construction is where \term{participial form} = gerund-participial does its work. \mention{The house needs painting} is participial, but it is the wrong participle for passive. A binary participial-predicate column would miss this distinction.
+
+\subsection{What the revision shows}
+
+The original scheme treated the passive as a single cluster to be coded at a single level. The revised scheme treats it as a cluster defined at the form level and maintained by functional pressures at the meaning and information-structure levels. The boundary cases~-- the theoretical target of the study~-- are precisely the cases where form and meaning come apart. By separating the levels, the scheme lets the model see the dissociation rather than forcing the coder to resolve it.
+
+\newpage
 \printbibliography
 
 \end{document}

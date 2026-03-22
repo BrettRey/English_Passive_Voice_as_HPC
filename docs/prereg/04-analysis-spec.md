@@ -36,25 +36,31 @@ The confirmatory fit is binary. Peripheral rows are not forced into the fit targ
 
 The confirmatory predictor set is:
 
-1. `auxiliary_type`
-2. `participial_predicate`
-3. `agent_realization`
-4. `promotion_type`
-5. `eventive_stative`
-6. `syntactic_environment`
-7. `subject_role_profile`
+1. `participial_form`
+2. `licensing_marker`
+3. `constructional_environment`
+4. `local_subject_present`
+5. `by_pp_present`
+6. `stranded_preposition`
+7. `event_implied`
+8. `agent_implied`
+9. `predicand_as_undergoer`
+
+These predictors are preregistered convenience codings over partly graded linguistic distinctions, but they are organized by level: the first six are form/construction cues and the last three are meaning cues. `constructional_environment` names construction types directly rather than invoking a finite/non-finite binary as an analytical primitive.
 
 ## Reference Levels
 
 Use treatment coding with the most foil-like level as reference where possible:
 
-1. `auxiliary_type = none-other`
-2. `participial_predicate = no`
-3. `agent_realization = none`
-4. `promotion_type = none-unclear`
-5. `eventive_stative = stative`
-6. `syntactic_environment = nonfinite-or-reduced`
-7. `subject_role_profile = unclear-other`
+1. `participial_form = none`
+2. `licensing_marker = absent_other`
+3. `constructional_environment = clausal_predication`
+4. `local_subject_present = no`
+5. `by_pp_present = no`
+6. `stranded_preposition = no`
+7. `event_implied = no`
+8. `agent_implied = no`
+9. `predicand_as_undergoer = no`
 
 ## Model
 
@@ -100,6 +106,12 @@ Compute:
 2. `stronger_rule`
 
 using `scripts/apply_checklist_baselines.py`.
+
+These deterministic comparators are deliberately surface-based. They use overt
+`be/get` material from the retained extraction metadata plus a small number of
+annotated convenience cues, rather than the gold functional field
+`licensing_marker`, so that they remain genuine checklist competitors rather
+than a recoding of the analyst's own structural judgment.
 
 Treat their `0/1` outputs as deterministic probabilities for Brier-score comparison.
 

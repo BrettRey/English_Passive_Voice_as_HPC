@@ -11,6 +11,7 @@ from pathlib import Path
 
 SEED = 20260319
 CORPORA = ("ewt", "gum")
+DEFAULT_COMPARISON_BANK = Path("data/pilot/study1_comparison_item_bank.csv")
 
 FIT_TARGETS = {
     ("ewt", "analytic_core_candidate"): 25,
@@ -19,25 +20,35 @@ FIT_TARGETS = {
     ("gum", "analytic_foil_candidate"): 25,
 }
 
-BOUNDARY_TARGETS = {
-    ("ewt", "peripheral_get"): 2,
-    ("ewt", "peripheral_reduced_embedded"): 2,
-    ("ewt", "peripheral_manual_probe"): 4,
-    ("gum", "peripheral_get"): 2,
-    ("gum", "peripheral_reduced_embedded"): 2,
-    ("gum", "peripheral_manual_probe"): 4,
+BOUNDARY_PASSIVE_TARGETS = {
+    ("ewt", "peripheral_get"): 1,
+    ("ewt", "peripheral_reduced_embedded"): 1,
+    ("ewt", "peripheral_manual_probe"): 2,
+    ("gum", "peripheral_get"): 1,
+    ("gum", "peripheral_reduced_embedded"): 1,
+    ("gum", "peripheral_manual_probe"): 2,
+}
+
+COMPARISON_TARGETS = {
+    "middle": 2,
+    "unaccusative_anticausative": 2,
+    "tough_construction": 2,
+    "needs_washing": 1,
+    "get_adjective": 1,
 }
 
 ANNOTATION_COLUMNS = (
-    "family_status",
+    "participial_form",
+    "licensing_marker",
+    "constructional_environment",
+    "local_subject_present",
+    "by_pp_present",
+    "stranded_preposition",
+    "event_implied",
+    "agent_implied",
+    "predicand_as_undergoer",
     "peripheral_subtype",
-    "auxiliary_type",
-    "participial_predicate",
-    "agent_realization",
-    "promotion_type",
-    "eventive_stative",
-    "syntactic_environment",
-    "subject_role_profile",
+    "family_status",
     "notes",
 )
 
@@ -50,10 +61,62 @@ BLIND_FIELDS = [
     *ANNOTATION_COLUMNS,
 ]
 
+COMPARISON_REQUIRED_COLUMNS = (
+    "candidate_id",
+    "comparison_type",
+    "head_form",
+    "sentence",
+    "sentence_marked",
+)
+
+COMPARISON_DEFAULTS = {
+    "corpus": "comparison",
+    "split": "constructed",
+    "source_file": "study1_comparison_item_bank.csv",
+    "sent_id": "",
+    "head_id": "",
+    "head_lemma": "",
+    "upos": "",
+    "xpos": "",
+    "head_deprel": "",
+    "feats": "",
+    "has_voice_pass": "",
+    "has_nsubj_pass": "",
+    "has_obl_agent": "",
+    "aux_pass_lemmas": "",
+    "aux_lemmas": "",
+    "cop_lemmas": "",
+    "participle_like": "",
+    "parent_id": "",
+    "parent_form": "",
+    "parent_deprel": "",
+    "head_children": "",
+    "provisional_streams": "comparison_construction",
+    "sampling_stream": "comparison_construction",
+    "sample_set": "boundary_comparison_candidate",
+    "sample_rank": "",
+}
+
 
 def read_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def read_comparison_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    missing = [col for col in COMPARISON_REQUIRED_COLUMNS if not rows or col not in rows[0]]
+    if missing:
+        raise SystemExit(
+            "Comparison bank is missing required columns: " + ", ".join(missing)
+        )
+    normalized = []
+    for row in rows:
+        new = dict(COMPARISON_DEFAULTS)
+        new.update(row)
+        normalized.append(new)
+    return normalized
 
 
 def write_rows(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:
@@ -62,6 +125,17 @@ def write_rows(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) ->
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def ordered_fieldnames(rows: list[dict[str, str]]) -> list[str]:
+    fieldnames: list[str] = []
+    seen: set[str] = set()
+    for row in rows:
+        for field in row.keys():
+            if field not in seen:
+                seen.add(field)
+                fieldnames.append(field)
+    return fieldnames
 
 
 def shuffled(rows: list[dict[str, str]], seed: int, salt: str) -> list[dict[str, str]]:
@@ -119,9 +193,9 @@ def select_fit_rows(rows: list[dict[str, str]], seed: int) -> list[dict[str, str
     return sorted(selected, key=lambda row: row["candidate_id"])
 
 
-def select_boundary_rows(rows: list[dict[str, str]], seed: int) -> list[dict[str, str]]:
+def select_boundary_passive_rows(rows: list[dict[str, str]], seed: int) -> list[dict[str, str]]:
     selected = []
-    for (corpus, stream), target in BOUNDARY_TARGETS.items():
+    for (corpus, stream), target in BOUNDARY_PASSIVE_TARGETS.items():
         eligible = [
             row for row in rows
             if row.get("corpus") == corpus
@@ -137,6 +211,36 @@ def select_boundary_rows(rows: list[dict[str, str]], seed: int) -> list[dict[str
             new["pilot_class"] = "peripheral"
             new["pilot_stream"] = stream
             selected.append(new)
+    return selected
+
+
+def select_comparison_rows(rows: list[dict[str, str]], seed: int) -> list[dict[str, str]]:
+    selected = []
+    for comparison_type, target in COMPARISON_TARGETS.items():
+        eligible = [
+            row for row in rows
+            if row.get("comparison_type") == comparison_type
+        ]
+        require_count(eligible, target, f"comparison {comparison_type}")
+        chosen = shuffled(eligible, seed, f"comparison:{comparison_type}")[:target]
+        for row in chosen:
+            new = dict(row)
+            new["pilot_pack"] = "boundary_probe"
+            new["pilot_corpus"] = "comparison"
+            new["pilot_class"] = "foil"
+            new["pilot_stream"] = "comparison_construction"
+            selected.append(new)
+    return selected
+
+
+def select_boundary_rows(
+    passive_rows: list[dict[str, str]],
+    comparison_rows: list[dict[str, str]],
+    seed: int,
+) -> list[dict[str, str]]:
+    selected = []
+    selected.extend(select_boundary_passive_rows(passive_rows, seed))
+    selected.extend(select_comparison_rows(comparison_rows, seed))
     return sorted(selected, key=lambda row: row["candidate_id"])
 
 
@@ -151,7 +255,7 @@ def assign_item_ids(rows: list[dict[str, str]], prefix: str) -> list[dict[str, s
 
 def write_pack(output_dir: Path, stem: str, rows: list[dict[str, str]], seed: int) -> None:
     keyed, first, second = attach_orders(rows, seed, stem)
-    keyed_fields = list(keyed[0].keys())
+    keyed_fields = ordered_fieldnames(keyed)
     write_rows(output_dir / f"{stem}_key.csv", keyed, keyed_fields)
     write_rows(output_dir / f"{stem}_first_pass_blind.csv", first, BLIND_FIELDS + ["pilot_order"])
     write_rows(output_dir / f"{stem}_second_pass_blind.csv", second, BLIND_FIELDS + ["pilot_order"])
@@ -162,7 +266,7 @@ def manifest_lines(fit_rows: list[dict[str, str]], boundary_rows: list[dict[str,
         "Study 1 reliability pilots",
         f"seed={seed}",
         "fit_gate targets: 25 core + 25 foil per corpus",
-        "boundary_probe targets: 2 get + 2 reduced_embedded + 4 manual_probe per corpus",
+        "boundary_probe targets: passive rows = 1 get + 1 reduced_embedded + 2 manual_probe per corpus; comparison rows = 2 middle + 2 unaccusative/anticausative + 2 tough + 1 needs_washing + 1 get_adjective",
         f"fit_gate_total={len(fit_rows)}",
         f"boundary_probe_total={len(boundary_rows)}",
     ]
@@ -182,6 +286,19 @@ def manifest_lines(fit_rows: list[dict[str, str]], boundary_rows: list[dict[str,
             f"reduced={stream_counts.get('peripheral_reduced_embedded', 0)} "
             f"manual={stream_counts.get('peripheral_manual_probe', 0)}"
         )
+    comparison_rows = [row for row in boundary_rows if row["pilot_stream"] == "comparison_construction"]
+    comparison_counts: dict[str, int] = {}
+    for row in comparison_rows:
+        comparison_type = row.get("comparison_type", "")
+        comparison_counts[comparison_type] = comparison_counts.get(comparison_type, 0) + 1
+    lines.append(
+        "comparison boundary_probe: "
+        f"middle={comparison_counts.get('middle', 0)} "
+        f"unaccusative={comparison_counts.get('unaccusative_anticausative', 0)} "
+        f"tough={comparison_counts.get('tough_construction', 0)} "
+        f"needs_washing={comparison_counts.get('needs_washing', 0)} "
+        f"get_adjective={comparison_counts.get('get_adjective', 0)}"
+    )
     return lines
 
 
@@ -189,12 +306,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--comparison-bank", default=DEFAULT_COMPARISON_BANK, type=Path)
     parser.add_argument("--seed", default=SEED, type=int)
     args = parser.parse_args()
 
     rows = read_rows(args.input)
+    comparison_rows = read_comparison_rows(args.comparison_bank)
     fit_rows = assign_item_ids(select_fit_rows(rows, args.seed), "FG")
-    boundary_rows = assign_item_ids(select_boundary_rows(rows, args.seed), "BP")
+    boundary_rows = assign_item_ids(select_boundary_rows(rows, comparison_rows, args.seed), "BP")
 
     output_dir = args.output_dir
     write_pack(output_dir, "study1_pilot", fit_rows, args.seed)

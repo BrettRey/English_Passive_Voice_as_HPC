@@ -1,0 +1,8 @@
+Study 1 fit-gate supplement
+seed=20260320
+target_per_corpus=25
+ewt core: usable=20 deficit=5
+ewt foil: usable=25 deficit=0
+gum core: usable=24 deficit=1
+gum foil: usable=25 deficit=0
+supplement_total=6

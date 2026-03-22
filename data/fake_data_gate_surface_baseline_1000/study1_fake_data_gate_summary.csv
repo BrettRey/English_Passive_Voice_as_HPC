@@ -1,0 +1,2 @@
+simulations,quota_per_corpus,strict_pass_rate,stronger_pass_rate,strict_gate,stronger_gate,overall_gate
+1000,120,0.788,0.844,TRUE,TRUE,TRUE

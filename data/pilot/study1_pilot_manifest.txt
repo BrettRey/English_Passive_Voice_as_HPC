@@ -1,10 +1,11 @@
 Study 1 reliability pilots
 seed=20260319
 fit_gate targets: 25 core + 25 foil per corpus
-boundary_probe targets: 2 get + 2 reduced_embedded + 4 manual_probe per corpus
+boundary_probe targets: passive rows = 1 get + 1 reduced_embedded + 2 manual_probe per corpus; comparison rows = 2 middle + 2 unaccusative/anticausative + 2 tough + 1 needs_washing + 1 get_adjective
 fit_gate_total=100
 boundary_probe_total=16
 ewt fit_gate: core=25 foil=25
-ewt boundary_probe: get=2 reduced=2 manual=4
+ewt boundary_probe: get=1 reduced=1 manual=2
 gum fit_gate: core=25 foil=25
-gum boundary_probe: get=2 reduced=2 manual=4
+gum boundary_probe: get=1 reduced=1 manual=2
+comparison boundary_probe: middle=2 unaccusative=2 tough=2 needs_washing=1 get_adjective=1

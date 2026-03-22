@@ -12,29 +12,43 @@ def norm(value: str) -> str:
     return value.strip().lower().replace("_", "-")
 
 
-STRICT_AUX = {"be", "get"}
-PROMOTED = {"direct-object-promotion", "oblique-stranding-promotion"}
+REQUIRED_COLUMNS = (
+    "participial_form",
+    "local_subject_present",
+    "event_implied",
+    "aux_pass_lemmas",
+    "aux_lemmas",
+    "cop_lemmas",
+)
 
 
-def promoted_subject_signal(row: dict[str, str]) -> bool:
-    nsubj_pass = row.get("has_nsubj_pass", "").strip()
-    if nsubj_pass in {"0", "1"}:
-        return nsubj_pass == "1"
-    promotion = norm(row.get("promotion_type", ""))
-    return promotion in PROMOTED
+def has_surface_be_or_get(row: dict[str, str]) -> bool:
+    for field in ("aux_pass_lemmas", "aux_lemmas", "cop_lemmas"):
+        values = {
+            part.strip()
+            for part in norm(row.get(field, "")).split(";")
+            if part.strip() and part.strip() != "-"
+        }
+        if {"be", "get"} & values:
+            return True
+    return False
 
 
 def strict_checklist(row: dict[str, str]) -> int:
-    aux = norm(row.get("auxiliary_type", ""))
-    participial = norm(row.get("participial_predicate", ""))
-    return int(aux in STRICT_AUX and participial == "yes" and promoted_subject_signal(row))
+    participial = norm(row.get("participial_form", ""))
+    local_subject = norm(row.get("local_subject_present", ""))
+    return int(
+        participial == "past-participle"
+        and has_surface_be_or_get(row)
+        and local_subject == "yes"
+    )
 
 
 def stronger_rule(row: dict[str, str]) -> int:
     if not strict_checklist(row):
         return 0
-    eventive = norm(row.get("eventive_stative", ""))
-    return int(eventive != "stative")
+    eventive = norm(row.get("event_implied", ""))
+    return int(eventive != "no")
 
 
 def main() -> None:
@@ -46,6 +60,12 @@ def main() -> None:
     with args.input.open(encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         fieldnames = list(reader.fieldnames or [])
+        missing = [col for col in REQUIRED_COLUMNS if col not in fieldnames]
+        if missing:
+            raise SystemExit(
+                "Baseline application failed: input is missing required v2 columns: "
+                + ", ".join(missing)
+            )
         for col in ["strict_checklist", "stronger_rule"]:
             if col not in fieldnames:
                 fieldnames.append(col)

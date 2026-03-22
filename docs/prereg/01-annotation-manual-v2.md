@@ -1,4 +1,4 @@
-# Annotation Manual
+# Annotation Manual (v2)
 
 ## Purpose
 
@@ -186,7 +186,7 @@ Use `no` otherwise.
 
 ## Meaning Cue Definitions
 
-The three meaning cues target the predicate's semantic contribution, not the sentence-level meaning. Composition with the auxiliary, tense, subject, and discourse context may yield a different sentence-level interpretation. Code the predicate.
+The three meaning cues target the **predicate's semantic contribution**, not the sentence-level meaning. Composition with the auxiliary, tense, subject, and discourse context may yield a different sentence-level interpretation. Code the predicate.
 
 ### 7. Event Implied
 
@@ -328,7 +328,7 @@ Use these defaults to avoid silent drift:
 5. if the row is merely participial with no serious passive-family analysis, prefer `foil`
 6. if event implication is genuinely open after predicate-level inspection, use `unclear`
 7. if form cues are fully passive-typical but a meaning cue is `unclear`, keep the row `core`; meaning cues are not definitional gates
-8. code meaning cues for the predicate, not the sentence; do not let compositional sentence-level cues override the predicate-level judgment
+8. code meaning cues for the **predicate**, not the sentence; do not let compositional sentence-level cues override the predicate-level judgment
 
 ## Comparison Items
 
@@ -363,8 +363,6 @@ Targets:
 2. `kappa >= 0.70` for each meaning cue (semantic judgments are expected to be harder)
 3. `kappa >= 0.80` for `family_status`
 4. `kappa >= 0.70` for `peripheral_subtype`
-
-If the 100-row fit-gate pilot yields fewer than 25 usable `core` rows or 25 usable `foil` rows in a corpus because some fit-gate items are reclassified `peripheral`, draw a deterministic one-pass supplement from unused candidates of the affected class until the usable count is restored. Use the supplement for the fake-data adequacy gate only; keep the original 100-row fit-gate batch as the reliability basis.
 
 If a meaning cue fails the reliability threshold:
 

@@ -1,0 +1,9 @@
+candidate_id,comparison_type,sent_id,head_id,head_form,head_lemma,upos,xpos,head_children,sentence,sentence_marked
+cmp-middle-001,middle,cmp-middle-001,3,spreads,spread,VERB,VBZ,2:nsubj:butter;4:advmod:easily,The butter spreads easily.,The butter [[spreads]] easily.
+cmp-middle-002,middle,cmp-middle-002,3,washes,wash,VERB,VBZ,2:nsubj:shirt;4:advmod:well,This shirt washes well.,This shirt [[washes]] well.
+cmp-unacc-001,unaccusative_anticausative,cmp-unacc-001,3,opened,open,VERB,VBD,2:nsubj:door,The door opened.,The door [[opened]].
+cmp-unacc-002,unaccusative_anticausative,cmp-unacc-002,3,died,die,VERB,VBD,2:nsubj:people;1:nummod:Twenty,Twenty people died.,Twenty people [[died]].
+cmp-tough-001,tough_construction,cmp-tough-001,4,easy,easy,ADJ,JJ,2:nsubj:book;6:xcomp:read,This book is easy to read.,This book is [[easy]] to read.
+cmp-tough-002,tough_construction,cmp-tough-002,4,hard,hard,ADJ,JJ,2:nsubj:report;6:xcomp:understand,That report is hard to understand.,That report is [[hard]] to understand.
+cmp-needs-001,needs_washing,cmp-needs-001,4,painting,paint,VERB,VBG,2:nsubj:house;3:root:needs,The house needs painting.,The house needs [[painting]].
+cmp-getadj-001,get_adjective,cmp-getadj-001,3,drunk,drunk,ADJ,JJ,2:nsubj:he;2:root:got,He got drunk.,He got [[drunk]].

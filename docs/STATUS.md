@@ -10,7 +10,7 @@ The repo is still at scaffold stage. [main.tex](/Users/brettreynolds/Documents/L
 
 1. Identified the new source pair in `~/Downloads` as Pullum's *Fear and Loathing of the English Passive*.
 2. Verified bibliographic metadata against DOI/Crossref and the University of Edinburgh research record.
-3. Added `pullum2014fear` to [references.bib](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/references.bib#L9).
+3. Recorded Pullum 2014 using the inherited central bibliography rather than a project-local bib entry.
 4. Added a working source note at [docs/pullum-2014-passive-notes.md](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/docs/pullum-2014-passive-notes.md#L1).
 5. Read the relevant theoretical spine of the HPC book to align this paper with the maintenance/projectibility framework.
 
@@ -37,6 +37,6 @@ Pullum is descriptive groundwork, not the whole argument. The book-level contrib
 
 Current intentional changes before restart:
 
-1. Modified [references.bib](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/references.bib#L9)
+1. Use the central [references.bib](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/references.bib) symlink plus [references-local.bib](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/references-local.bib#L1) for any project-only additions
 2. Added [docs/pullum-2014-passive-notes.md](/Users/brettreynolds/Documents/LLM-CLI-projects/papers/English_Passive_Voice_as_HPC/docs/pullum-2014-passive-notes.md#L1)
 3. Added this status file and the companion handoff/decision notes
