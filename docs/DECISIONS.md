@@ -170,3 +170,18 @@ rerun rather than by ad hoc interpretation.
 ### Paper Appendix
 
 An appendix will describe and explain the cue restructuring process: what the original scheme looked like, what the pilot exposed, the middle-construction test case, and how the form/meaning split was motivated. This provides a methodological contribution beyond the empirical results.
+
+## 2026-03-22
+
+### Reliability Timing
+
+The v2 packet is now on `master` with the corrected surface-based baseline, the
+passing `1000`-simulation fake-data gate, and the regenerated pilot materials.
+The remaining preregistration blocker is the second blind pass and reliability
+check.
+
+**Decision.** Do not start the second blind pass early. Keep the prefilled
+second-pass sheets frozen and wait until 2026-04-05 so the manual's `14`-day
+lag is actually satisfied. Treat 2026-04-05 as a hard follow-up date for the
+100-row fit-gate second pass, the 16-row boundary second pass, and immediate
+reliability scoring.
